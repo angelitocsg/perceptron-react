@@ -16,27 +16,15 @@ function App() {
     aprendizado,
     validarCodigo,
   } = useCofre();
-  const [content1, setContent1] = useState(false);
-  const [content2, setContent2] = useState(false);
-  const [content3, setContent3] = useState(false);
-  const [content4, setContent4] = useState(false);
+  const [content, setContent] = useState<boolean[]>([false, false, false]);
 
   function reiniciar() {
-    console.log("reiniciar");
     fecharCofre();
-    setContent1(false);
-    setContent2(false);
-    setContent3(false);
-    setContent4(false);
+    setContent(content.map(() => false));
   }
 
   function getCodigo() {
-    return [
-      Number(content1) * 1000,
-      Number(content2) * 1000,
-      Number(content3) * 1000,
-      Number(content4) * 1000,
-    ];
+    return content.map((x) => Number(x) + 1);
   }
 
   function handleValidar() {
@@ -53,87 +41,112 @@ function App() {
     else cofreFechadoErrado(getCodigo());
   }
 
+  function handleContentSwitch(value: boolean, index: number) {
+    setContent(content.map((item, i) => (i === index ? value : item)));
+  }
+
   return (
-    <div className="App">
-      <h1>JS Perceptron</h1>
-      <h2>Missão: ABRIR O COFRE</h2>
+    <div className="d-flex flex-column align-items-center">
+      <h1 className="mt-4">ALGORITMO PERCEPTRON</h1>
+      <h2 className="mt-4">Aprender código que abre o cofre</h2>
 
       <p className="mt-4">Código a ser analisado para ação</p>
       <div className="d-flex gap-3 justify-content-center">
-        <Switch
-          name="sw1"
-          checked={content1}
-          onChange={() => setContent1(!content1)}
-        />
-        <Switch
-          name="sw2"
-          checked={content2}
-          onChange={() => setContent2(!content2)}
-        />
-        <Switch
-          name="sw3"
-          checked={content3}
-          onChange={() => setContent3(!content3)}
-        />
-        <Switch
-          name="sw4"
-          checked={content4}
-          onChange={() => setContent4(!content4)}
-        />
+        {content.map((item, i) => (
+          <Switch
+            key={"sw" + i}
+            name={"sw" + i}
+            checked={item}
+            onChange={() => handleContentSwitch(!item, i)}
+          />
+        ))}
       </div>
 
       <h3 className="mt-4 mb-1">Treinamento</h3>
-      <p className="small">
-        <span className="badge text-bg-danger">
-          {aprendizado ? "APRENDIZADO" : "VALIDAÇÃO"}
-        </span>
-      </p>
+      <div className="d-flex flex-column align-items-center">
+        <p className="small">
+          <span className="badge text-bg-danger">
+            {aprendizado ? "APRENDIZADO" : "VALIDAÇÃO"}
+          </span>
+        </p>
+        {aprendizado && (
+          <div className="card mb-3" style={{ maxWidth: 500 }}>
+            <div className="card-body">
+              <div className="card-text">
+                No modo de aprendizado você deve informar um código, clicar em
+                "VALIDAR" e após a ação ser realizada informar se está correto
+                ou incorreto clicando nos respectivos botões.
+              </div>
+            </div>
+          </div>
+        )}
+        {!aprendizado && (
+          <div className="card mb-3" style={{ maxWidth: 500 }}>
+            <div className="card-body">
+              <div className="card-text">
+                No modo de validação você deve informar um código, clicar em
+                "VALIDAR" e após a ação aprendida será executada.
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="btn-group" role="group" aria-label="Aprendizado">
         <button
           disabled={!validarCodigo && aprendizado}
           className="btn btn-primary"
           type="button"
+          style={{ minWidth: 200 }}
           onClick={handleValidar}
         >
           VALIDAR
         </button>
         <button
-          className="me-3 btn btn-secondary"
+          className="btn btn-secondary"
           type="button"
+          style={{ minWidth: 200 }}
           onClick={() => setAprendizado(!aprendizado)}
         >
           ALTERNAR MODO
         </button>
       </div>
 
-      <div className="btn-group" role="group" aria-label="Correto ou incorreto">
-        <button
-          disabled={validarCodigo || !aprendizado}
-          className="btn btn-primary"
-          type="button"
-          onClick={handleCorreto}
-        >
-          CORRETO
-        </button>
-        <button
-          disabled={validarCodigo || !aprendizado}
-          className="btn btn-warning"
-          type="button"
-          onClick={handleIncorreto}
-        >
-          INCORRETO
-        </button>
-      </div>
-
       <p className="mt-4">Ação a ser realizada pelo algoritmo</p>
-      <div>
+      <div className="mb-4">
         <img
           src={cofreAberto ? img_cofre_aberto : img_cofre_fechado}
           alt="cofre aberto"
-          width={100}
+          width={150}
         />
       </div>
+
+      {aprendizado && (
+        <div
+          className="btn-group"
+          role="group"
+          aria-label="Correto ou incorreto"
+        >
+          <button
+            disabled={validarCodigo || !aprendizado}
+            className="btn btn-primary"
+            type="button"
+            style={{ minWidth: 200 }}
+            onClick={handleCorreto}
+          >
+            CORRETO
+          </button>
+          <button
+            disabled={validarCodigo || !aprendizado}
+            className="btn btn-warning"
+            type="button"
+            style={{ minWidth: 200 }}
+            onClick={handleIncorreto}
+          >
+            INCORRETO
+          </button>
+        </div>
+      )}
     </div>
   );
 }
