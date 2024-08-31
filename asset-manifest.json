@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/perceptron-react/static/css/main.55158079.css",
-    "main.js": "/perceptron-react/static/js/main.c0f95383.js",
+    "main.js": "/perceptron-react/static/js/main.23485e88.js",
     "static/js/453.b290889d.chunk.js": "/perceptron-react/static/js/453.b290889d.chunk.js",
     "static/media/cofre_aberto.png": "/perceptron-react/static/media/cofre_aberto.79efd828e223edc96039.png",
     "index.html": "/perceptron-react/index.html",
     "main.55158079.css.map": "/perceptron-react/static/css/main.55158079.css.map",
-    "main.c0f95383.js.map": "/perceptron-react/static/js/main.c0f95383.js.map",
+    "main.23485e88.js.map": "/perceptron-react/static/js/main.23485e88.js.map",
     "453.b290889d.chunk.js.map": "/perceptron-react/static/js/453.b290889d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.55158079.css",
-    "static/js/main.c0f95383.js"
+    "static/js/main.23485e88.js"
   ]
 }
