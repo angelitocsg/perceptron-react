@@ -28,6 +28,12 @@ export default class logx {
       ? console.log(`%c${message}`, this.colors.info, optionalParams)
       : console.log(`%c${message}`, this.colors.info);
   }
+  
+  static success(message: string, ...optionalParams: any[]) {
+    optionalParams && optionalParams.length > 0
+      ? console.log(`%c${message}`, this.colors.success, optionalParams)
+      : console.log(`%c${message}`, this.colors.success);
+  }
 
   static page(message: string, param: string = "") {
     console.log(
