@@ -10,12 +10,6 @@ function usePerceptron(taxaAprendizado: number = 0.1) {
   const [validarCodigo, setValidarCodigo] = useState(true);
   const [emAprendizado, setAprendizado] = useState(true);
 
-  useEffect(() => {
-    logx.warn("usePerceptron.pesos", JSON.stringify(pesosRef.current));
-    if (pesosRef.current.length > 0)
-      localStorage.setItem(PERCEPTRON_PESOS, JSON.stringify(pesosRef.current));
-  }, [pesosRef]);
-
   // useEffect(() => {
   //   logx.info("usePerceptron.positivo", retornoPositivo);
   // }, [retornoPositivo]);
@@ -33,9 +27,12 @@ function usePerceptron(taxaAprendizado: number = 0.1) {
       pesosRef.current.reduce((p, c) => p + c) === 0
     )
       pesosRef.current = tmp;
-    if (pesosRef.current.length === 0) {
-      // const rand = Math.random() * 2 - 1;
-      const _pesos = Array(codigo.length).fill(0);
+    if (
+      pesosRef.current.length === 0 ||
+      pesosRef.current.length !== codigo.length
+    ) {
+      const rand = Math.random() * 2 - 1;
+      const _pesos = Array(codigo.length).fill(rand);
       pesosRef.current = _pesos;
       return _pesos;
     }
@@ -43,8 +40,8 @@ function usePerceptron(taxaAprendizado: number = 0.1) {
   }
 
   function atualizaPesos(codigo: number[], erro: number) {
-    const _pesos = pesosRef.current.map((peso, i) => 
-       peso + taxaAprendizado * erro * codigo[i]
+    const _pesos = pesosRef.current.map(
+      (peso, i) => peso + taxaAprendizado * erro * codigo[i]
     );
     logx.info(
       "usePerceptron.atualizaPesos",
@@ -52,6 +49,7 @@ function usePerceptron(taxaAprendizado: number = 0.1) {
       JSON.stringify(_pesos)
     );
     pesosRef.current = _pesos;
+    localStorage.setItem(PERCEPTRON_PESOS, JSON.stringify(_pesos));
   }
 
   function respostaPositivaErrada(codigo: number[]) {
