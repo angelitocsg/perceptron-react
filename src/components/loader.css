@@ -1,0 +1,34 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 60px;
+    aspect-ratio: 1;
+    display: flex;
+    animation: l8-0 1s infinite sptes(1);
+  }
+  .loader::before,
+  .loader::after {
+    content: "";
+    flex: 1;
+    animation: 
+      l8-1 1s infinite linear alternate,
+      l8-2 2s infinite steps(1) -.3s;
+  }
+  .loader::after {
+    --s:-1,-1;
+  }
+  @keyframes l8-0 {
+    0%  {transform: scaleX(1)  rotate(0deg)}
+    50% {transform: scaleX(-1) rotate(-90deg)}
+  }
+  @keyframes l8-1 {
+    0%,
+    5%   {transform:scale(var(--s,1)) translate(0px)   perspective(150px) rotateY(0deg) }
+    33%  {transform:scale(var(--s,1)) translate(-10px) perspective(150px) rotateX(0deg) }
+    66%  {transform:scale(var(--s,1)) translate(-10px) perspective(150px) rotateX(-180deg)}
+    95%,
+    100% {transform:scale(var(--s,1)) translate(0px)   perspective(150px) rotateX(-180deg)}
+  }
+  @keyframes l8-2 {
+    0%  {background:#999}
+    50% {background:#666}
+  }

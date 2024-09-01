@@ -1,31 +1,27 @@
 import { useEffect, useState } from "react";
 import logx from "../logx";
 
-function useCofre(taxaAprendizado: number = 0.1) {
-  const [cofreAberto, setCofreAberto] = useState(false);
+function usePerceptron(taxaAprendizado: number = 0.1) {
+  const [retornoPositivo, setPositivo] = useState(false);
   const [pesos, setPesos] = useState<number[]>([]);
   const [validarCodigo, setValidarCodigo] = useState(true);
-  const [aprendizado, setAprendizado] = useState(true);
+  const [emAprendizado, setAprendizado] = useState(true);
 
   useEffect(() => {
     logx.warn("pesos", JSON.stringify(pesos));
   }, [pesos]);
 
   useEffect(() => {
-    logx.info("cofreAberto", cofreAberto);
-  }, [cofreAberto]);
+    logx.info("positivo", retornoPositivo);
+  }, [retornoPositivo]);
 
   useEffect(() => {
-    logx.info("validarCodigo", validarCodigo);
-  }, [validarCodigo]);
-
-  useEffect(() => {
-    logx.info("aprendizado", String(aprendizado));
-  }, [aprendizado]);
+    logx.info("aprendizado", String(emAprendizado));
+  }, [emAprendizado]);
 
   function inicializaPesos(codigo: number[]) {
     if (pesos.length === 0) {
-      const _pesos = Array(codigo.length).fill(0.0);
+      const _pesos = Array(codigo.length).fill(Math.random() * 2 - 1);
       setPesos(_pesos);
       return _pesos;
     }
@@ -46,42 +42,42 @@ function useCofre(taxaAprendizado: number = 0.1) {
     setPesos(_pesos);
   }
 
-  function cofreAbertoErrado(codigo: number[]) {
-    if (!aprendizado) return;
+  function respostaPositivaErrada(codigo: number[]) {
+    if (!emAprendizado) return;
     let _erro = -1;
     atualizaPesos(codigo, _erro);
   }
 
-  function cofreFechadoErrado(codigo: number[]) {
-    if (!aprendizado) return;
+  function respostaNegativaErrada(codigo: number[]) {
+    if (!emAprendizado) return;
     let _erro = 1;
     atualizaPesos(codigo, _erro);
   }
 
-  function deveAbrirCofre(codigo: number[]) {
+  function predizer(codigo: number[]) {
     setValidarCodigo(false);
     let _pesos = inicializaPesos(codigo);
     let _pesos_codigo = codigo.map((c, i) => c * (_pesos[i] * 1.0));
     let _saida = _pesos_codigo.reduce((p, c) => p + c, 0.0);
     logx.error("pesos", JSON.stringify(_pesos));
-    return setCofreAberto(_saida >= 0);
+    return setPositivo(_saida >= 0);
   }
 
-  function fecharCofre() {
+  function reiniciar() {
     setValidarCodigo(true);
-    setCofreAberto(false);
+    setPositivo(false);
   }
 
   return {
-    cofreAbertoErrado,
-    cofreFechadoErrado,
-    deveAbrirCofre,
+    respostaPositivaErrada,
+    respostaNegativaErrada,
+    predizer,
     setAprendizado,
-    fecharCofre,
-    cofreAberto,
-    aprendizado,
+    reiniciar,
+    retornoPositivo,
+    emAprendizado,
     validarCodigo,
   };
 }
 
-export default useCofre;
+export default usePerceptron;
