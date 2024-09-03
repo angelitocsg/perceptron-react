@@ -1,15 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './pages/App';
-import reportWebVitals from './reportWebVitals';
+import "./index.css";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+import { DecouplerContext } from "./di/DecouplerContext";
+import { ServiceLocator } from "./di/ServiceLocator";
+import { ServiceName } from "./di/ServiceName";
+import App from "./pages/App";
+import reportWebVitals from "./reportWebVitals";
+import { AutoTraining } from "./algorithms/AutoTraining";
+import { Perceptron } from "./algorithms/Perceptron";
+import { ScreenService } from "./services/ScreenService";
+import { StateService } from "./services/StateService";
+
+let locator = new ServiceLocator();
+locator.register(ServiceName.AutoTrainService, AutoTraining);
+locator.register(ServiceName.PerceptronService, Perceptron);
+locator.register(ServiceName.ScreenService, ScreenService);
+locator.register(ServiceName.StateService, StateService);
+
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <DecouplerContext.Provider value={locator}>
+      <App />
+    </DecouplerContext.Provider>
   </React.StrictMode>
 );
 
